@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GUO JIAMING | Works</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: #222;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s ease;
+    }
+
+    /* ===== Language visibility control ===== */
+    /* 默认：两种语言都按照自身标签的 display 呈现。
+       当 body 上有 lang-en / lang-zh class 时，隐藏非当前语言。 */
+    body.lang-en .lang-zh {
+      display: none;
+    }
+    body.lang-zh .lang-en {
+      display: none;
+    }
+
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .lang-toggle {
+      border: none;
+      background: transparent;
+      padding: 0;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    .lang-toggle:hover {
+      opacity: 1;
+    }
+
+    /* ===== 背景主题：通过 body 的 class 来切换 ===== */
+    .theme-neutral {
+      background: linear-gradient(135deg, #eeeeee, #d9d9d9);
+    }
+
+    .theme-warmgrey {
+      background: linear-gradient(135deg, #ffb199, #ff6f85);
+    }
+
+    .theme-bluegrey {
+      background: linear-gradient(135deg, #3a3a3a, #151515);
+    }
+
+    /* ===== Navbar ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      display: flex;
+      justify-content: space-between; /* 左右两端对齐 */
+      align-items: center;
+      padding: 0 40px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      z-index: 20;
+      box-sizing: border-box;
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .logo-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .logo-role {
+      font-size: 0.78rem;
+      font-weight: 500;
+      opacity: 0.65;
+      letter-spacing: 0.5px;
+      color: #222;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: #5563aa;
+    }
+
+    /* ===== Intro ===== */
+    .intro {
+      margin-top: 120px;
+      padding: 40px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .intro-title {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+
+    .intro-text {
+      font-size: 0.95rem;
+      opacity: 0.8;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+
+    /* ===== Project List ===== */
+    .projects {
+      max-width: 1000px;
+      margin: 0 auto 120px;
+      padding: 0 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      box-sizing: border-box;
+    }
+
+    .project-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .project-card {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 18px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: minmax(240px, 38%) 1fr;
+      gap: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+      transition: 0.25s ease;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.12);
+    }
+
+    .project-media {
+      position: relative;
+      padding-top: 56.25%; /* 16:9 封面比例 */
+      background: #444;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .project-media-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .project-media-inner img,
+    .project-media-inner video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* 统一裁切成封面 */
+    }
+
+    .media-placeholder {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.08em;
+    }
+
+    .project-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .project-meta {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      margin-bottom: 10px;
+    }
+
+    .project-desc {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    .project-more {
+      position: absolute;
+      right: 20px;
+      bottom: 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    @media (max-width: 800px) {
+      .project-card {
+        grid-template-columns: 1fr;
+      }
+      .projects {
+        padding: 0 24px;
+      }
+      .intro {
+        padding: 24px;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      /* 导航栏稍微矮一点，内边距也减一点 */
+      .navbar {
+        height: 56px;
+        padding: 0 16px;
+      }
+
+      /* 手机端只保留名字，隐藏 Digital Media Artist 这一小段 */
+      .logo-role {
+        display: none;
+      }
+
+      /* 导航文字稍微小一点，避免再挤 */
+      .nav-links a {
+        font-size: 0.9rem;
+      }
+
+      /* ✅ 真正生效的：手机端作品卡片单列 + 底部预留给文字和 Explore */
+      .project-card {
+        grid-template-columns: 1fr;
+        padding: 16px 16px 100px;  /* 底部 padding 加大一点，给描述和 Explore 留空间 */
+      }
+
+      /* ✅ 把封面比例调高一点，看起来不那么扁 */
+      .project-media {
+        padding-top: 70%;  /* 原来是 56.25%，现在略高一点，你可以自己调 65~80 之间 */
+      }
+    }
+    
+    /* ===== 右下角主题切换按钮 ===== */
+    .theme-buttons {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 20;
+    }
+
+    .theme-btn {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #bfbfbf;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    }
+
+    .btn-neutral {
+      background: #e3e3e3;
+    }
+
+    .btn-warmgrey {
+      background: linear-gradient(135deg, #ffb199, #ff6f85);
+    }
+
+    .btn-bluegrey {
+      background: linear-gradient(135deg, #3a3a3a, #151515);
+    }
+    /* Dark theme text color overrides */
+    body.theme-bluegrey {
+      color: #f5f5f5;
+    }
+
+    body.theme-bluegrey .intro-title,
+    body.theme-bluegrey .intro-text,
+    body.theme-bluegrey .project-title,
+    body.theme-bluegrey .project-meta,
+    body.theme-bluegrey .project-desc,
+    body.theme-bluegrey .project-more,
+    body.theme-bluegrey .logo,
+    body.theme-bluegrey .nav-links a {
+      color: #f5f5f5;
+    }
+  </style>
+</head>
+
+<!-- 默认使用中性灰背景主题 -->
+<body class="theme-neutral lang-en">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-name lang-en">GUO JIAMING</span>
+      <span class="logo-name lang-zh">郭佳铭</span>
+      <span class="logo-role lang-en">Digital Media Artist</span>
+      <span class="logo-role lang-zh">数字媒体艺术创作者</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="lang-en">Home</a>
+      <a href="index.html" class="lang-zh">首页</a>
+      <a href="works.html" class="lang-en">Works</a>
+      <a href="works.html" class="lang-zh">作品</a>
+      <div class="lang-switch">
+        <button class="lang-toggle" id="langToggleLabel" onclick="toggleLang()">EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Intro -->
+  <section class="intro">
+    <h1 class="intro-title lang-en">Works</h1>
+    <h1 class="intro-title lang-zh">作品</h1>
+    <p class="intro-text lang-en">
+      Six works containing collage, handmade book, photography, video and game.
+    </p>
+    <p class="intro-text lang-zh">
+      包含拼贴、手工书、摄影、视频与游戏的六件作品。
+    </p>
+  </section>
+
+  <!-- Projects (6 works) -->
+  <section class="projects">
+
+    <!-- Work 1 -->
+    <a href="work01.html" class="project-link">
+      <article class="project-card">
+        <div class="project-media">
+          <div class="project-media-inner">
+            <img src="images/1.1.png" alt="[待补充 · Work 1 image]" />
+          </div>
+        </div>
+        <div>
+          <h2 class="project-title lang-en">A series of collages</h2>
+          <h2 class="project-title lang-zh">一组拼贴作品</h2>
+          <div class="project-meta lang-en">Handmade Collage · 2021</div>
+          <div class="project-meta lang-zh">手工拼贴 · 2021</div>
+          <p class="project-desc lang-en">A series of collage works exploring dreams, childhood and aspirations.</p>
+          <p class="project-desc lang-zh">一组围绕梦境、童年与愿望展开的拼贴作品。</p>
+          <div class="project-more lang-en">Explore →</div>
+          <div class="project-more lang-zh">查看详情 →</div>
+        </div>
+      </article>
+    </a>
+
+    <!-- Work 2 -->
+    <a href="work02.html" class="project-link">
+      <article class="project-card">
+        <div class="project-media">
+          <div class="project-media-inner">
+            <img src="videos/2.1.png" alt="[Work 2 thumbnail]" />
+          </div>
+        </div>
+        <div>
+          <h2 class="project-title lang-en">World TELE</h2>
+          <h2 class="project-title lang-zh">世界 特乐</h2>
+          <div class="project-meta lang-en">Artist Book · 2021</div>
+          <div class="project-meta lang-zh">手工书 · 2021</div>
+          <p class="project-desc lang-en">A handmade book about the world of TELE, chronicling the skeletal underworld and an adventure tale.</p>
+          <p class="project-desc lang-zh">一本关于特乐世界的手工书，记录骷髅地下世界与一段冒险故事。</p>
+          <div class="project-more lang-en">Explore →</div>
+          <div class="project-more lang-zh">查看详情 →</div>
+        </div>
+      </article>
+    </a>
+
+    <!-- Work 3 -->
+    <a href="work03.html" class="project-link">
+      <article class="project-card">
+        <div class="project-media">
+          <div class="project-media-inner">
+            <img src="images/2.1.jpg" alt="[Work 3 image]" />
+          </div>
+        </div>
+        <div>
+          <h2 class="project-title lang-en">The Oasis Five</h2>
+          <h2 class="project-title lang-zh">绿洲五侠</h2>
+          <div class="project-meta lang-en">Photography Series · 2021</div>
+          <div class="project-meta lang-zh">摄影系列 · 2021</div>
+          <p class="project-desc lang-en">A series of portrait photographs taken in Xiamen's Shapowei district, capturing the myriad flavours of life and the journey of human growth.</p>
+          <p class="project-desc lang-zh">在厦门沙坡尾拍摄的一组肖像摄影，捕捉生活的多种气息与人的成长轨迹。</p>
+          <div class="project-more lang-en">Explore →</div>
+          <div class="project-more lang-zh">查看详情 →</div>
+        </div>
+      </article>
+    </a>
+
+    <!-- Work 4 -->
+    <a href="work04.html" class="project-link">
+      <article class="project-card">
+        <div class="project-media">
+          <div class="project-media-inner">
+            <img src="videos/4.1.png" alt="[Work 2 thumbnail]" />
+          </div>
+        </div>
+        <div>
+          <h2 class="project-title lang-en">Socialisation</h2>
+          <h2 class="project-title lang-zh">社交</h2>
+          <div class="project-meta lang-en">Hand-drawn Animation · 2023</div>
+          <div class="project-meta lang-zh">手绘动画 · 2023</div>
+          <p class="project-desc lang-en">A hand-drawn animation without dialogue, revealing people's underlying social anxieties.</p>
+          <p class="project-desc lang-zh">一部无对白的手绘动画，呈现人们潜在的社交焦虑。</p>
+          <div class="project-more lang-en">Explore →</div>
+          <div class="project-more lang-zh">查看详情 →</div>
+        </div>
+      </article>
+    </a>
+
+    <!-- Work 5 -->
+    <a href="work05.html" class="project-link">
+      <article class="project-card">
+        <div class="project-media">
+          <div class="project-media-inner">
+            <img src="videos/5.1.png" alt="[Work 2 thumbnail]" />
+          </div>
+        </div>
+        <div>
+          <h2 class="project-title lang-en">Hexgame</h2>
+          <h2 class="project-title lang-zh">六边形游戏</h2>
+          <div class="project-meta lang-en">Game Demo Video · 2024</div>
+          <div class="project-meta lang-zh">游戏演示视频 · 2024</div>
+          <p class="project-desc lang-en">A hexagonal grid-based item placement game demo video, where players can arrange various terrains according to their preferences.</p>
+          <p class="project-desc lang-zh">一段基于六边形网格的物件摆放游戏演示视频，玩家可以根据喜好组合不同地形。</p>
+          <div class="project-more lang-en">Explore →</div>
+          <div class="project-more lang-zh">查看详情 →</div>
+        </div>
+      </article>
+    </a>
+
+    <!-- Work 6 -->
+    <a href="work06.html" class="project-link">
+      <article class="project-card">
+        <div class="project-media">
+          <div class="project-media-inner">
+            <img src="videos/6.1.png" alt="[Work 2 thumbnail]" />
+          </div>
+        </div>
+        <div>
+          <h2 class="project-title lang-en">Coelacanth</h2>
+          <h2 class="project-title lang-zh">腔棘鱼</h2>
+          <div class="project-meta lang-en">Hand-drawn Animation · 2025</div>
+          <div class="project-meta lang-zh">手绘动画 · 2025</div>
+          <p class="project-desc lang-en">A hand-drawn animation exploring life, evolution, and genetics.</p>
+          <p class="project-desc lang-zh">一部围绕生命、进化与基因展开的手绘动画。</p>
+          <div class="project-more lang-en">Explore →</div>
+          <div class="project-more lang-zh">查看详情 →</div>
+        </div>
+      </article>
+    </a>
+
+  </section>
+
+  <!-- 右下角主题切换按钮 -->
+  <div class="theme-buttons">
+    <div class="theme-btn btn-neutral"  onclick="setTheme('theme-neutral')"  title="Neutral grey"></div>
+    <div class="theme-btn btn-warmgrey" onclick="setTheme('theme-warmgrey')" title="Warm grey"></div>
+    <div class="theme-btn btn-bluegrey" onclick="setTheme('theme-bluegrey')" title="Blue grey"></div>
+  </div>
+
+  <script>
+    // 切换主题并保存到 localStorage
+    function setTheme(themeName) {
+      const body = document.body;
+      body.classList.remove("theme-neutral", "theme-warmgrey", "theme-bluegrey");
+      body.classList.add(themeName);
+      try {
+        localStorage.setItem("siteTheme", themeName);
+      } catch (e) {}
+    }
+
+    // 应用已保存的主题
+    function applySavedTheme() {
+      try {
+        const saved = localStorage.getItem("siteTheme");
+        if (saved) {
+          const body = document.body;
+          body.classList.remove("theme-neutral", "theme-warmgrey", "theme-bluegrey");
+          body.classList.add(saved);
+        }
+      } catch (e) {}
+    }
+
+    // ===== Language switch: EN / 中文 =====
+    function setLang(lang, persist = true) {
+      const body = document.body;
+      body.classList.remove("lang-en", "lang-zh");
+      body.classList.add("lang-" + lang);
+
+      if (persist) {
+        try {
+          localStorage.setItem("siteLang", lang);
+        } catch (e) {}
+      }
+
+      const toggleBtn = document.getElementById("langToggleLabel");
+      if (toggleBtn) {
+        toggleBtn.textContent = (lang === "en") ? "EN" : "中文";
+      }
+    }
+
+    function toggleLang() {
+      const body = document.body;
+      const isEn = body.classList.contains("lang-en");
+      const nextLang = isEn ? "zh" : "en";
+      setLang(nextLang);
+    }
+
+    function applySavedLang() {
+      try {
+        const saved = localStorage.getItem("siteLang");
+        if (saved === "en" || saved === "zh") {
+          setLang(saved, false);
+        } else {
+          setLang("en", false);
+        }
+      } catch (e) {
+        setLang("en", false);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      applySavedTheme();
+      applySavedLang();
+    });
+  </script>
+
+</body>
+</html>

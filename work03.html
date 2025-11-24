@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GUO JIAMING | The Oasis Five</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== 语言可见性控制：与 index / works / work01 / work02 一致 ===== */
+    body.lang-en .lang-zh {
+      display: none;
+    }
+    body.lang-zh .lang-en {
+      display: none;
+    }
+
+    .lang-toggle {
+      border: none;
+      background: transparent;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+    }
+
+    .lang-toggle:hover {
+      background: rgba(0,0,0,0.06);
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: #222;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s ease;
+    }
+
+    /* ===== 主题背景：与 index / works 对齐 ===== */
+    .theme-neutral {
+      background: linear-gradient(135deg, #ffffff, #c8c8c8);
+    }
+
+    .theme-warmgrey {
+      background: linear-gradient(135deg, #ffc8b8, #ff5a78);
+    }
+
+    .theme-bluegrey {
+      background: linear-gradient(135deg, #3a3a3a, #151515);
+    }
+
+    /* ===== 导航栏：与 works 一致，固定但半透明 ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      z-index: 20;
+      box-sizing: border-box;
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .logo-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .logo-role {
+      font-size: 0.78rem;
+      font-weight: 500;
+      opacity: 0.65;
+      letter-spacing: 0.5px;
+      color: #222;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: #5563aa;
+    }
+
+    @media (max-width: 800px) {
+      .navbar {
+        padding: 0 20px;
+      }
+    }
+
+    /* ===== 页面布局 ===== */
+    .page-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px 80px;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 800px) {
+      .page-wrap {
+        padding: 90px 20px 60px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      /* 导航栏稍微矮一点，内边距也减一点 */
+      .navbar {
+        height: 56px;
+        padding: 0 16px;
+      }
+
+      /* 手机端只保留名字，隐藏 Digital Media Artist 这一小段 */
+      .logo-role {
+        display: none;
+      }
+
+      /* 导航文字稍微小一点，避免再挤 */
+      .nav-links a {
+        font-size: 0.9rem;
+        gap: 20px;
+      }
+    }
+    
+    .back-link {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .back-link a {
+      color: rgba(0,0,0,0.7);
+      text-decoration: none;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== 顶部：媒体 + 文本信息 ===== */
+    .work-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 3fr);
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .work-hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 左侧媒体：不要底部半透明大框，只保留三张独立堆叠图片 */
+    .work-media-card {
+      background: transparent;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+      box-sizing: border-box;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 右侧说明卡片：保持原来的磨砂半透明风格 */
+    .work-info-card {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+      box-sizing: border-box;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      min-height: 505px;
+    }
+
+    /* ===== 主媒体（视频或代表图片） ===== */
+    .work-media-frame {
+      position: relative;
+      padding-top: 56.25%; /* 16:9 */
+      overflow: visible;
+      border-radius: 18px 18px 0 0;
+      flex: 1;
+    }
+
+    /* Hover 效果：堆叠图自身轻微上移，模仿 Works 卡片的悬浮感 */
+    .work-media-frame {
+      transition: transform 0.2s ease;
+    }
+
+    .work-media-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      /* 将堆叠整体靠到左上/右上，只保留局部区域 */
+      align-items: flex-start;     /* 顶部对齐 */
+      justify-content: flex-end;   /* 靠右 */
+    }
+
+    .work-media-inner img,
+    .work-media-inner video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 全屏堆叠的大图层，营造右上角叠放的感觉 */
+    .media-stack-layer {
+      position: absolute;
+      /* 五张图尺寸一致，整体再缩小一点，让留白更多 */
+      width: 80%;
+      height: 80%;
+      right: 32px;
+      top: 16px; /* 整体略微下移，方便第三张纵向中点更接近右侧文字框中心 */
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .media-stack-layer:nth-child(1) {
+      /* 以第 3、4 张为基准，让五张在同一斜线上等距排列 */
+      transform: translateX(-56px) translateY(68px);
+      opacity: 1;
+      z-index: 5;
+    }
+
+    .media-stack-layer:nth-child(2) {
+      transform: translateX(-36px) translateY(50px);
+      opacity: 0.9;
+      z-index: 4;
+    }
+
+    /* 第三张保持原位置，纵向中点对齐右侧文字卡片中心附近 */
+    .media-stack-layer:nth-child(3) {
+      transform: translateX(-16px) translateY(32px);
+      opacity: 0.85;
+      z-index: 3;
+    }
+
+    .media-stack-layer:nth-child(4) {
+      transform: translateX(4px) translateY(14px);
+      opacity: 0.7;
+      z-index: 2;
+    }
+
+    .media-stack-layer:nth-child(5) {
+      transform: translateX(24px) translateY(-4px);
+      opacity: 0.55;
+      z-index: 1;
+    }
+
+    .media-stack-layer:nth-child(1):hover {
+      transform: translateX(-56px) translateY(62px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+    }
+
+    .media-stack-layer:nth-child(2):hover {
+      transform: translateX(-36px) translateY(44px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+    }
+
+    .media-stack-layer:nth-child(3):hover {
+      transform: translateX(-16px) translateY(26px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+    }
+
+    .media-stack-layer:nth-child(4):hover {
+      transform: translateX(4px) translateY(8px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+    }
+
+    .media-stack-layer:nth-child(5):hover {
+      transform: translateX(24px) translateY(-10px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+    }
+
+
+    .media-stack-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 640px) {
+      /* 手机端：五张图片改为居中竖向重叠，尺寸统一，逻辑与 work01 一致 */
+      .work-media-inner {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        gap: 0;                   /* 重叠由 margin / transform 控制 */
+        align-items: center;      /* 整组图片居中 */
+        justify-content: flex-start;
+      }
+
+      .media-stack-layer {
+        position: relative;
+        width: 88%;               /* 比屏幕略小，左右留一点空隙 */
+        max-width: 420px;
+        aspect-ratio: 4 / 3;       /* 统一为 4:3 比例，五张同尺寸 */
+        right: auto;
+        top: auto;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        margin: 0 auto;           /* 居中 */
+        transform: none;          /* 基础状态不再使用桌面端的 translateX/translateY */
+      }
+
+      /* 垂直方向重叠：第 1 张在最上方，2–5 依次在下方略微露出 */
+      .media-stack-layer:nth-child(1) {
+        margin-top: -190px;        /* 你可以根据视觉再微调这个值 */
+        z-index: 5;               /* 第一张在最上层 */
+        transform: none;
+      }
+
+      .media-stack-layer:nth-child(2) {
+        margin-top: -200px;       /* 与上一张产生竖向重叠 */
+        z-index: 4;
+        transform: none;
+      }
+
+      .media-stack-layer:nth-child(3) {
+        margin-top: -200px;
+        z-index: 3;
+        transform: none;
+      }
+
+      .media-stack-layer:nth-child(4) {
+        margin-top: -200px;
+        z-index: 2;
+        transform: none;
+      }
+
+      .media-stack-layer:nth-child(5) {
+        margin-top: -200px;
+        z-index: 1;               /* 最底层，但仍露出边缘 */
+        transform: none;
+      }
+
+      .media-stack-layer img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* 手机端：点击 / hover 时五张图片统一向下轻微弹出，方向一致 */
+      .media-stack-layer:hover {
+        transform: translateY(8px);
+        box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+      }
+
+      .media-stack-layer:nth-child(1):hover,
+      .media-stack-layer:nth-child(2):hover,
+      .media-stack-layer:nth-child(3):hover,
+      .media-stack-layer:nth-child(4):hover,
+      .media-stack-layer:nth-child(5):hover {
+        transform: translateY(8px);
+      }
+    }
+
+    .work-media-caption {
+      padding: 10px 16px 14px;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    /* ===== 文本信息区域 ===== */
+    .work-info-card {
+      padding: 18px 20px 20px;
+    }
+
+    .work-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .work-meta {
+      font-size: 0.9rem;
+      opacity: 0.78;
+      margin-bottom: 14px;
+    }
+
+    .work-section-title {
+      font-size: 1rem;        /* 与 work01 / work02 一致的小标题字号 */
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 2px;     /* 减少与正文之间的空隙 */
+    }
+
+    .work-text {
+      font-size: 0.82rem;     /* 与 work01 / work02 对齐的正文字号 */
+      opacity: 0.9;
+      line-height: 1.6;
+      white-space: normal;    /* 取消 pre-line，避免多出空行 */
+      margin: 0 0 4px;        /* 段落间距与前两页保持一致 */
+    }
+
+    /* ===== 左侧：图片系列堆叠缩略图 + 弹出浏览 ===== */
+    .media-footer {
+      padding: 10px 16px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.85rem;
+      opacity: 0.85;
+    }
+
+    .media-caption-text {
+      flex: 1;
+    }
+
+    .stacked-thumbs {
+      position: relative;
+      width: 72px;
+      height: 52px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .stacked-thumb {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.26);
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .stacked-thumb:nth-child(1) {
+      transform: translateX(-6px) translateY(4px);
+      opacity: 0.6;
+    }
+
+    .stacked-thumb:nth-child(2) {
+      transform: translateX(0) translateY(0);
+      opacity: 0.85;
+    }
+
+    .stacked-thumb:nth-child(3) {
+      transform: translateX(6px) translateY(-4px);
+    }
+
+    .stacked-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .stacked-count {
+      position: absolute;
+      right: 4px;
+      bottom: 4px;
+      font-size: 0.75rem;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    }
+
+    /* ===== 全屏图片浏览 lightbox ===== */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox.visible {
+      display: flex;
+    }
+
+    .lightbox-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .lightbox-content {
+      position: relative;
+      z-index: 1;
+      max-width: 90vw;
+      max-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .lightbox-image-wrap {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      background: #000;
+    }
+
+    .lightbox-image-wrap img {
+      display: block;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 90vh;
+      /* 不使用 object-fit，按图片自身比例显示 */
+    }
+
+    .lightbox-arrow {
+      border: none;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .lightbox-arrow:hover {
+      background: rgba(0,0,0,0.95);
+      transform: translateY(-1px);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      border: none;
+      background: rgba(0,0,0,0.8);
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+
+    @media (max-width: 700px) {
+      .lightbox-content {
+        gap: 8px;
+      }
+      .lightbox-arrow {
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+      }
+    }
+
+    /* ===== 右下角主题切换按钮 ===== */
+    .theme-buttons {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 30;
+    }
+
+    .theme-btn {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #bfbfbf;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    }
+
+    .btn-neutral {
+      background: linear-gradient(135deg, #ffffff, #c8c8c8);
+    }
+
+    .btn-warmgrey {
+      background: linear-gradient(135deg, #ffc8b8, #ff5a78);
+    }
+
+    .btn-bluegrey {
+      background: linear-gradient(135deg, #3a3a3a, #151515);
+    }
+
+    /* ===== 深色主题下前景文字变浅（与 works 对齐） ===== */
+    body.theme-bluegrey {
+      color: #f5f5f5;
+    }
+
+    body.theme-bluegrey .work-title,
+    body.theme-bluegrey .work-meta,
+    body.theme-bluegrey .work-section-title,
+    body.theme-bluegrey .work-text,
+    body.theme-bluegrey .image-series-title,
+    body.theme-bluegrey .image-thumb-caption,
+    body.theme-bluegrey .back-link a {
+      color: #f5f5f5;
+    }
+  </style>
+</head>
+
+<body class="theme-neutral lang-en">
+
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-name lang-en">GUO JIAMING</span>
+      <span class="logo-name lang-zh">郭佳铭</span>
+
+      <span class="logo-role lang-en">Digital Media Artist</span>
+      <span class="logo-role lang-zh">数字媒体艺术创作者</span>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html" class="lang-en">Home</a>
+      <a href="index.html" class="lang-zh">首页</a>
+
+      <a href="works.html" class="lang-en">Works</a>
+      <a href="works.html" class="lang-zh">作品</a>
+
+      <button class="lang-toggle" id="langToggleLabel" type="button" onclick="toggleLang()">EN</button>
+    </div>
+  </nav>
+
+  <main class="page-wrap">
+    <!-- 返回 Works 链接 -->
+    <div class="back-link">
+      <a href="works.html">
+        <span class="lang-en">← Back to works</span>
+        <span class="lang-zh">← 返回作品列表</span>
+      </a>
+    </div>
+
+    <!-- 顶部：主媒体 + 作品信息 -->
+    <section class="work-hero">
+      <!-- 左侧：主媒体（可以是 video 或单张代表图） -->
+      <article class="work-media-card">
+        <div class="work-media-frame">
+          <div class="work-media-inner">
+            <!-- 如果是视频作品，请改回 video；如果是图像系列，则用堆叠形式 -->
+            <!-- 堆叠大图：使用五张图片 2.1–2.5 作为系列 -->
+            <div class="media-stack-layer" onclick="openLightbox(0)">
+              <img src="images/2.1.jpg" alt="[待补充 · alt 1]" />
+            </div>
+            <div class="media-stack-layer" onclick="openLightbox(1)">
+              <img src="images/2.2.jpg" alt="[待补充 · alt 2]" />
+            </div>
+            <div class="media-stack-layer" onclick="openLightbox(2)">
+              <img src="images/2.3.jpg" alt="[待补充 · alt 3]" />
+            </div>
+            <div class="media-stack-layer" onclick="openLightbox(3)">
+              <img src="images/2.4.jpg" alt="[待补充 · alt 4]" />
+            </div>
+            <div class="media-stack-layer" onclick="openLightbox(4)">
+              <img src="images/2.5.jpg" alt="[待补充 · alt 5]" />
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 右侧：文本信息 -->
+      <aside class="work-info-card">
+        <h1 class="work-title">
+          <span class="lang-en">The Oasis Five</span>
+          <span class="lang-zh">绿洲五侠</span>
+        </h1>
+        <div class="work-meta">
+          <span class="lang-en">2021 · Photography Series</span>
+          <span class="lang-zh">2021 · 摄影作品系列</span>
+        </div>
+
+        <h2 class="work-section-title">
+          <span class="lang-en">Overview</span>
+          <span class="lang-zh">概述</span>
+        </h2>
+        <p class="work-text lang-en">
+          A series of portrait photographs taken in Xiamen's Shapowei district, capturing the myriad flavours of life and the journey of human growth.
+        </p>
+        <p class="work-text lang-zh">
+          这一系列人像拍摄于厦门沙坡尾，记录不同个体在城市空间中的生命气息与成长轨迹。
+        </p>
+
+        <h2 class="work-section-title">
+          <span class="lang-en">Context</span>
+          <span class="lang-zh">背景</span>
+        </h2>
+        <p class="work-text lang-en">
+          This series was created for a first‑year portrait course. I photographed five people of different ages in Shapowei, observing their everyday presence within the same environment.
+        </p>
+        <p class="work-text lang-zh">
+          这组作品是我大一人像课的作业。我在厦门沙坡尾拍摄了五位不同年龄的人物，记录他们在同一环境中的日常状态。
+        </p>
+
+        <h2 class="work-section-title">
+          <span class="lang-en">Process</span>
+          <span class="lang-zh">过程</span>
+        </h2>
+        <p class="work-text lang-en">
+          The portraits were shot on site using a camera, then refined in Photoshop through basic colour and contrast adjustments.
+        </p>
+        <p class="work-text lang-zh">
+          人像在沙坡尾实地拍摄，并在 Photoshop 中进行色彩与对比度的基础调整。
+        </p>
+      </aside>
+    </section>
+
+  </main>
+
+  <!-- 全屏图片浏览 lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-backdrop" onclick="closeLightbox()"></div>
+    <div class="lightbox-content">
+      <button class="lightbox-arrow" type="button" onclick="prevImage()">‹</button>
+      <div class="lightbox-image-wrap">
+        <img id="lightboxImage" src="" alt="[待补充 · series image]" />
+        <button class="lightbox-close" type="button" onclick="closeLightbox()">×</button>
+      </div>
+      <button class="lightbox-arrow" type="button" onclick="nextImage()">›</button>
+    </div>
+  </div>
+
+  <!-- 右下角主题切换按钮：与 index / works 一致 -->
+  <div class="theme-buttons">
+    <div class="theme-btn btn-neutral"  onclick="setTheme('theme-neutral')"  title="Neutral grey"></div>
+    <div class="theme-btn btn-warmgrey" onclick="setTheme('theme-warmgrey')" title="Warm warm"></div>
+    <div class="theme-btn btn-bluegrey" onclick="setTheme('theme-bluegrey')" title="Dark grey"></div>
+  </div>
+
+  <script>
+    // 图片系列路径：五张图片 2.1–2.5
+    const seriesImages = [
+      "images/2.1.jpg",
+      "images/2.2.jpg",
+      "images/2.3.jpg",
+      "images/2.4.jpg",
+      "images/2.5.jpg"
+    ];
+
+    let currentImageIndex = 0;
+
+    function openLightbox(index) {
+      if (!seriesImages.length) return;
+      currentImageIndex = index || 0;
+      const lb = document.getElementById("lightbox");
+      const img = document.getElementById("lightboxImage");
+      if (lb && img) {
+        img.src = seriesImages[currentImageIndex];
+        lb.classList.add("visible");
+      }
+    }
+
+    function closeLightbox() {
+      const lb = document.getElementById("lightbox");
+      if (lb) {
+        lb.classList.remove("visible");
+      }
+    }
+
+    function showImageAt(index) {
+      if (!seriesImages.length) return;
+      const img = document.getElementById("lightboxImage");
+      if (!img) return;
+      currentImageIndex = (index + seriesImages.length) % seriesImages.length;
+      img.src = seriesImages[currentImageIndex];
+    }
+
+    function prevImage() {
+      showImageAt(currentImageIndex - 1);
+    }
+
+    function nextImage() {
+      showImageAt(currentImageIndex + 1);
+    }
+
+    // 切换主题并保存到 localStorage
+    function setTheme(themeName) {
+      // 保留 lang 类
+      const body = document.body;
+      let lang = "en";
+      if (body.classList.contains("lang-zh")) lang = "zh";
+      body.className = themeName + " lang-" + lang;
+      try {
+        localStorage.setItem("siteTheme", themeName);
+      } catch (e) {}
+    }
+
+    // 应用已保存的主题
+    function applySavedTheme() {
+      try {
+        const saved = localStorage.getItem("siteTheme");
+        if (saved) {
+          const body = document.body;
+          let lang = "en";
+          if (body.classList.contains("lang-zh")) lang = "zh";
+          body.className = saved + " lang-" + lang;
+        }
+      } catch (e) {}
+    }
+
+    // ===== 语言切换：与 index / works / work01 / work02 一致 =====
+    function setLang(lang, persist = true) {
+      const body = document.body;
+      body.classList.remove("lang-en", "lang-zh");
+      body.classList.add("lang-" + lang);
+
+      if (persist) {
+        try { localStorage.setItem("siteLang", lang); } catch (e) {}
+      }
+
+      const btn = document.getElementById("langToggleLabel");
+      if (btn) btn.textContent = (lang === "en") ? "EN" : "中文";
+    }
+
+    function toggleLang() {
+      const isEn = document.body.classList.contains("lang-en");
+      const nextLang = isEn ? "zh" : "en";
+      setLang(nextLang);
+      setTimeout(equalizeHeroHeights, 0);
+    }
+
+    function applySavedLang() {
+      try {
+        const saved = localStorage.getItem("siteLang");
+        if (saved === "en" || saved === "zh") {
+          setLang(saved, false);
+        } else {
+          setLang("en", false);
+        }
+      } catch (e) {
+        setLang("en", false);
+      }
+    }
+
+    // ===== 桌面端语言切换后保持高度一致 =====
+    let heroMinHeight = 505;
+    function equalizeHeroHeights() {
+      const media = document.querySelector(".work-media-card");
+      const info  = document.querySelector(".work-info-card");
+      if (!media || !info) return;
+
+      if (window.matchMedia("(max-width: 900px)").matches) {
+        media.style.minHeight = "";
+        info.style.minHeight  = "";
+        return;
+      }
+
+      media.style.minHeight = heroMinHeight + "px";
+      info.style.minHeight  = heroMinHeight + "px";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      applySavedTheme();
+      applySavedLang();
+      setTimeout(equalizeHeroHeights, 50);
+    });
+
+    window.addEventListener("load", () => {
+      equalizeHeroHeights();
+    });
+  </script>
+
+</body>
+</html>

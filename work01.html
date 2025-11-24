@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GUO JIAMING | A series of collages</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      color: #222;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s ease;
+    }
+
+    /* ===== 主题背景：与 index / works 对齐 ===== */
+    .theme-neutral {
+      background: linear-gradient(135deg, #ffffff, #c8c8c8);
+    }
+
+    .theme-warmgrey {
+      background: linear-gradient(135deg, #ffc8b8, #ff5a78);
+    }
+
+    .theme-bluegrey {
+      background: linear-gradient(135deg, #3a3a3a, #151515);
+    }
+
+    /* ===== 导航栏：与 works 一致，固定但半透明 ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      z-index: 20;
+      box-sizing: border-box;
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .logo-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .logo-role {
+      font-size: 0.78rem;
+      font-weight: 500;
+      opacity: 0.65;
+      letter-spacing: 0.5px;
+      color: #222;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: #5563aa;
+    }
+
+    @media (max-width: 800px) {
+      .navbar {
+        padding: 0 20px;
+      }
+    }
+
+    /* ===== 页面布局 ===== */
+    .page-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 40px 80px;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 800px) {
+      .page-wrap {
+        padding: 90px 20px 60px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      /* 导航栏稍微矮一点，内边距也减一点 */
+      .navbar {
+        height: 56px;
+        padding: 0 16px;
+      }
+    
+      /* 手机端只保留名字，隐藏 Digital Media Artist 这一小段 */
+      .logo-role {
+        display: none;
+      }
+
+      /* 导航文字稍微小一点，避免再挤 */
+      .nav-links a {
+        font-size: 0.9rem;
+      }
+
+      /* 顶部布局：上下堆叠，间距稍微缩小一点 */
+      .work-hero {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      /* 媒体框不再固定 16:9 比例，让内容自己撑开高度 */
+      .work-media-frame {
+        padding-top: 0;
+        height: auto;
+        border-radius: 18px;
+        overflow: visible;
+      }
+
+      /* 内部容器改为普通文档流 + 竖向排列 */
+      .work-media-inner {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+        justify-content: flex-start;
+      }
+
+      /* 手机端：整体内容离导航栏更近一点 */
+      .page-wrap {
+        padding: 64px 20px 60px; /* 只在 <=640px 时生效，覆盖 800px 那里的 90px 顶部 padding */
+      }
+    }
+    
+    .back-link {
+      font-size: 1rem;      /* 与 Works 页面的 “Explore →” 一致的字号 */
+      font-weight: 600;     /* 稍微加粗，视觉层级更清晰 */
+      margin-bottom: 16px;
+    }
+
+  
+
+    .back-link a {
+      color: rgba(0,0,0,0.7);
+      text-decoration: none;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* ===== 顶部：媒体 + 文本信息 ===== */
+    .work-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 3fr);
+      gap: 24px;
+      align-items: stretch;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .work-hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 左侧媒体：不要底部半透明大框，只保留三张独立堆叠图片 */
+    .work-media-card {
+      background: transparent;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+      box-sizing: border-box;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 右侧说明卡片：保持原来的磨砂半透明风格 */
+    .work-info-card {
+      min-height: 505px; /* Fixed height to match English layout */
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+      box-sizing: border-box;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== 主媒体（视频或代表图片） ===== */
+    .work-media-frame {
+      position: relative;
+      padding-top: 56.25%; /* 16:9 */
+      overflow: visible;
+      border-radius: 18px 18px 0 0;
+      flex: 1;
+    }
+
+    /* Hover 效果：堆叠图自身轻微上移，模仿 Works 卡片的悬浮感 */
+    .work-media-frame {
+      transition: transform 0.2s ease;
+    }
+
+    .work-media-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      /* 将堆叠整体靠到左上/右上，只保留局部区域 */
+      align-items: flex-start;     /* 顶部对齐 */
+      justify-content: flex-end;   /* 靠右 */
+    }
+
+    .work-media-inner img,
+    .work-media-inner video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 全屏堆叠的大图层，营造右上角叠放的感觉 */
+    .media-stack-layer {
+      position: absolute;
+      /* 三张图尺寸一致，整体略小一点，让留白更舒服 */
+      width: 86%;
+      height: 86%;
+      right: 0;
+      top: 12px; /* 整体稍微下移，让第三张顶端更接近右侧文字框 */
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .media-stack-layer:nth-child(1) {
+      /* 第一张：位置调整，让三张图在同一斜线上等距排列 */
+      transform: translateX(-32px) translateY(44px);
+      opacity: 1;
+      z-index: 3;
+    }
+
+    .media-stack-layer:nth-child(2) {
+      /* 第二张：中间层，向下整体平移一点，让纵向中点更接近右侧文字框中心 */
+      transform: translateX(-12px) translateY(24px);
+      opacity: 0.85;
+      z-index: 2;
+    }
+
+    .media-stack-layer:nth-child(3) {
+      /* 第三张：偏右上，只保留轮廓感，但整体略下移 */
+      transform: translateX(8px) translateY(4px);
+      opacity: 0.6;
+      z-index: 1;
+    }
+
+    /* 每一张图单独 hover：轻微上移并加深阴影 */
+    .media-stack-layer:nth-child(1):hover {
+      transform: translateX(-32px) translateY(38px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+    }
+
+    .media-stack-layer:nth-child(2):hover {
+      transform: translateX(-12px) translateY(18px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+    }
+
+    .media-stack-layer:nth-child(3):hover {
+      transform: translateX(8px) translateY(-2px);
+      box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+    }
+
+    .media-stack-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (max-width: 640px) {
+      /* 手机端：三张图片改为居中竖向重叠，尺寸统一 */
+      .work-media-inner {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        gap: 0;                   /* 重叠由 margin / transform 控制，不再用 gap */
+        align-items: center;      /* 整组图片居中 */
+        justify-content: flex-start;
+      }
+
+      .media-stack-layer {
+        position: relative;
+        width: 88%;               /* 比屏幕略小，左右留一点空隙 */
+        max-width: 420px;
+        aspect-ratio: 4 / 3;      /* 统一为 4:3 比例，三张同尺寸 */
+        right: auto;
+        top: auto;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        margin: 0 auto;           /* 居中 */
+        transform: none;          /* 基础状态无位移，具体重叠在下面按 nth-child 配置 */
+      }
+
+      /* 垂直方向重叠：第 1 张在最上面，2 在中间，3 在最下 */
+      .media-stack-layer:nth-child(1) {
+        margin-top: -190px;
+        z-index: 3;              /* 第一张在最上层 */
+        transform: none;         /* 清除桌面端的 translateX/translateY */
+      }
+
+      .media-stack-layer:nth-child(2) {
+        margin-top: -200px;       /* 与第一张产生垂直重叠 */
+        z-index: 2;              /* 中间层 */
+        transform: none;         /* 清除桌面端的 translateX/translateY */
+      }
+
+      .media-stack-layer:nth-child(3) {
+        margin-top: -200px;       /* 继续往上叠，作为最底层的可见边缘 */
+        z-index: 1;              /* 最下层 */
+        transform: none;         /* 清除桌面端的 translateX/translateY */
+      }
+
+      .media-stack-layer img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* 手机端：点击 / hover 时三张图片统一向下轻微弹出 */
+      .media-stack-layer:hover {
+        transform: translateY(8px);
+        box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+      }
+
+      .media-stack-layer:nth-child(1):hover,
+      .media-stack-layer:nth-child(2):hover,
+      .media-stack-layer:nth-child(3):hover {
+        transform: translateY(8px);
+      }
+    }
+
+    .work-media-caption {
+      padding: 10px 16px 14px;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    /* ===== 文本信息区域 ===== */
+    .work-info-card {
+      padding: 18px 20px 20px;
+    }
+
+    .work-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 0 0 6px;
+    }
+
+    .work-meta {
+      font-size: 0.9rem;
+      opacity: 0.78;
+      margin-bottom: 14px;
+    }
+
+    .work-section-title {
+      font-size: 1rem;   /* 比标题和年份类型更小 */
+      font-weight: 600;
+      margin-top: 10px;
+      margin-bottom: 2px;   /* 减小与下面段落的间距，避免出现空一行的感觉 */
+    }
+
+    .work-text {
+      font-size: 0.82rem;   /* 主体文字整体缩小 */
+      opacity: 0.9;
+      line-height: 1.6;
+      white-space: normal;  /* 取消 pre-line，避免段落开头的换行被渲染成空行 */
+      margin: 0 0 4px;      /* 略微减小段落之间的间距 */
+    }
+
+    /* ===== 左侧：图片系列堆叠缩略图 + 弹出浏览 ===== */
+    .media-footer {
+      padding: 10px 16px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.85rem;
+      opacity: 0.85;
+    }
+
+    .media-caption-text {
+      flex: 1;
+    }
+
+    .stacked-thumbs {
+      position: relative;
+      width: 72px;
+      height: 52px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .stacked-thumb {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.26);
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .stacked-thumb:nth-child(1) {
+      transform: translateX(-6px) translateY(4px);
+      opacity: 0.6;
+    }
+
+    .stacked-thumb:nth-child(2) {
+      transform: translateX(0) translateY(0);
+      opacity: 0.85;
+    }
+
+    .stacked-thumb:nth-child(3) {
+      transform: translateX(6px) translateY(-4px);
+    }
+
+    .stacked-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .stacked-count {
+      position: absolute;
+      right: 4px;
+      bottom: 4px;
+      font-size: 0.75rem;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    }
+
+    /* ===== 全屏图片浏览 lightbox ===== */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox.visible {
+      display: flex;
+    }
+
+    .lightbox-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .lightbox-content {
+      position: relative;
+      z-index: 1;
+      max-width: 90vw;
+      max-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .lightbox-image-wrap {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      background: #000;
+    }
+
+    .lightbox-image-wrap img {
+      display: block;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 90vh;
+      /* 不使用 object-fit，按图片自身比例显示 */
+    }
+
+    .lightbox-arrow {
+      border: none;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .lightbox-arrow:hover {
+      background: rgba(0,0,0,0.95);
+      transform: translateY(-1px);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      border: none;
+      background: rgba(0,0,0,0.8);
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
+
+    @media (max-width: 700px) {
+      .lightbox-content {
+        gap: 8px;
+      }
+      .lightbox-arrow {
+        width: 32px;
+        height: 32px;
+        font-size: 1.2rem;
+      }
+    }
+
+    /* ===== 右下角主题切换按钮 ===== */
+    .theme-buttons {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 30;
+    }
+
+    .theme-btn {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #bfbfbf;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    }
+
+    .btn-neutral {
+      background: linear-gradient(135deg, #ffffff, #c8c8c8);
+    }
+
+    .btn-warmgrey {
+      background: linear-gradient(135deg, #ffc8b8, #ff5a78);
+    }
+
+    .btn-bluegrey {
+      background: linear-gradient(135deg, #3a3a3a, #151515);
+    }
+
+    /* ===== 深色主题下前景文字变浅（与 works 对齐，仅正文区域） ===== */
+    body.theme-bluegrey {
+      color: #f5f5f5;
+    }
+
+    body.theme-bluegrey .work-title,
+    body.theme-bluegrey .work-meta,
+    body.theme-bluegrey .work-section-title,
+    body.theme-bluegrey .work-text,
+    body.theme-bluegrey .image-series-title,
+    body.theme-bluegrey .image-thumb-caption,
+    body.theme-bluegrey .back-link a {
+      color: #f5f5f5;
+    }
+    /* ===== 语言可见性控制：与 index / works 一致 ===== */
+    body.lang-en .lang-zh {
+      display: none;
+    }
+    body.lang-zh .lang-en {
+      display: none;
+    }
+
+    .lang-toggle {
+      border: none;
+      background: transparent;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+    }
+
+    .lang-toggle:hover {
+      background: rgba(0,0,0,0.06);
+    }
+</style>
+</head>
+
+<body class="theme-neutral lang-en">
+
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-name lang-en">GUO JIAMING</span>
+      <span class="logo-name lang-zh">郭佳铭</span>
+      <span class="logo-role lang-en">Digital Media Artist</span>
+      <span class="logo-role lang-zh">数字媒体艺术创作者</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">
+        <span class="lang-en">Home</span>
+        <span class="lang-zh">首页</span>
+      </a>
+      <a href="works.html">
+        <span class="lang-en">Works</span>
+        <span class="lang-zh">作品</span>
+      </a>
+      <button type="button" class="lang-toggle" id="langToggleBtn" onclick="toggleLanguage()">
+        EN
+      </button>
+    </div>
+  </nav>
+
+  <main class="page-wrap">
+    <!-- 返回 Works 链接 -->
+    <div class="back-link">
+      <a href="works.html">
+        <span class="lang-en">← Back to works</span>
+        <span class="lang-zh">← 返回作品列表</span>
+      </a>
+    </div>
+
+    <!-- 顶部：主媒体 + 作品信息 -->
+    <section class="work-hero">
+      <!-- 左侧：主媒体（可以是 video 或单张代表图） -->
+      <article class="work-media-card">
+        <div class="work-media-frame">
+          <div class="work-media-inner">
+            <!-- 如果是视频作品，请改回 video；如果是图像系列，则用堆叠形式 -->
+            <!-- 堆叠大图：请用真实路径替换下面三张图片 -->
+            <div class="media-stack-layer" onclick="openLightbox(0)">
+              <img src="images/1.1.png" alt="[待补充 · alt 1]" />
+            </div>
+            <div class="media-stack-layer" onclick="openLightbox(1)">
+              <img src="images/1.2.jpg" alt="[待补充 · alt 2]" />
+            </div>
+            <div class="media-stack-layer" onclick="openLightbox(2)">
+              <img src="images/1.3.jpeg" alt="[待补充 · alt 3]" />
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 右侧：文本信息 -->
+      <aside class="work-info-card">
+        <h1 class="work-title">
+          <span class="lang-en">A series of collages</span>
+          <span class="lang-zh">一组拼贴作品</span>
+        </h1>
+        <div class="work-meta">
+          <span class="lang-en">2021 · Handmade Collage</span>
+          <span class="lang-zh">2021 · 手工拼贴</span>
+        </div>
+
+        <h2 class="work-section-title">
+          <span class="lang-en">Overview</span>
+          <span class="lang-zh">概述</span>
+        </h2>
+        <p class="work-text lang-en">
+          A series of collage works exploring dreams, childhood and aspirations.
+        </p>
+        <p class="work-text lang-zh">
+          一组围绕梦境、童年与愿望展开的拼贴作品。
+
+        <h2 class="work-section-title">
+          <span class="lang-en">Context</span>
+          <span class="lang-zh">背景</span>
+        </h2>
+        <p class="work-text lang-en">
+          The first collage depicts a dreamlike creature—a flying cattle-cart that does not exist in reality—representing my childhood fantasies and the surreal logic of dreams.
+          The second and third pieces draw from my early memories: objects and scenes I recalled from growing up were cut, rearranged, and rebuilt into new compositions. Through this process, I revisit how memory is assembled, distorted, and rewritten.
+        </p>
+        <p class="work-text lang-zh">
+          第一幅作品呈现了一个现实中不存在的梦境形象——一辆能够在蓝天中飞行的牛车，象征我孩童时期的幻想与梦境的超现实逻辑。
+第二与第三幅作品来自童年的记忆：我将记忆中的物件与场景重新拆解、拼凑，形成新的图像组合，借此重新理解记忆如何被重构、扭曲与书写。
+        </p>
+
+        <h2 class="work-section-title">
+          <span class="lang-en">Process</span>
+          <span class="lang-zh">过程</span>
+        </h2>
+        <p class="work-text lang-en">
+          The collages were created by cutting and tearing magazine pages, assembling the fragments manually, and fixing them with glue. 
+        </p>
+        <p class="work-text lang-zh">
+          整个系列采用手工方式完成：通过剪刀裁剪与手撕杂志图片，再以胶水粘贴组合。
+        </p>
+      </aside>
+    </section>
+
+  </main>
+
+  <!-- 全屏图片浏览 lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-backdrop" onclick="closeLightbox()"></div>
+    <div class="lightbox-content">
+      <button class="lightbox-arrow" type="button" onclick="prevImage()">‹</button>
+      <div class="lightbox-image-wrap">
+        <img id="lightboxImage" src="" alt="[待补充 · series image]" />
+        <button class="lightbox-close" type="button" onclick="closeLightbox()">×</button>
+      </div>
+      <button class="lightbox-arrow" type="button" onclick="nextImage()">›</button>
+    </div>
+  </div>
+
+  <!-- 右下角主题切换按钮：与 index / works 一致 -->
+  <div class="theme-buttons">
+    <div class="theme-btn btn-neutral"  onclick="setTheme('theme-neutral')"  title="Neutral grey"></div>
+    <div class="theme-btn btn-warmgrey" onclick="setTheme('theme-warmgrey')" title="Warm warm"></div>
+    <div class="theme-btn btn-bluegrey" onclick="setTheme('theme-bluegrey')" title="Dark grey"></div>
+  </div>
+
+  <script>
+    // 图片系列路径（请用真实路径替换）
+    const seriesImages = [
+      "images/1.1.png",
+      "images/1.2.jpg",
+      "images/1.3.jpeg"
+    ];
+
+    let currentImageIndex = 0;
+
+    function openLightbox(index) {
+      if (!seriesImages.length) return;
+      currentImageIndex = index || 0;
+      const lb = document.getElementById("lightbox");
+      const img = document.getElementById("lightboxImage");
+      if (lb && img) {
+        img.src = seriesImages[currentImageIndex];
+        lb.classList.add("visible");
+      }
+    }
+
+    function closeLightbox() {
+      const lb = document.getElementById("lightbox");
+      if (lb) {
+        lb.classList.remove("visible");
+      }
+    }
+
+    function showImageAt(index) {
+      if (!seriesImages.length) return;
+      const img = document.getElementById("lightboxImage");
+      if (!img) return;
+      currentImageIndex = (index + seriesImages.length) % seriesImages.length;
+      img.src = seriesImages[currentImageIndex];
+    }
+
+    function prevImage() {
+      showImageAt(currentImageIndex - 1);
+    }
+
+    function nextImage() {
+      showImageAt(currentImageIndex + 1);
+    }
+
+    // 切换主题并保存到 localStorage
+    function setTheme(themeName) {
+      const body = document.body;
+      const classes = body.className.split(/\s+/).filter(c => c && !c.startsWith("theme-"));
+      classes.push(themeName);
+      body.className = classes.join(" ");
+      try {
+        localStorage.setItem("siteTheme", themeName);
+      } catch (e) {}
+    }
+
+    // 应用已保存的主题
+    // 让左侧堆叠图和右侧文字卡在桌面端保持同一高度，避免中英文切换时整体高度跳动
+    let heroMinHeight = 0;
+    function equalizeHeroHeights() {
+      // 仅在桌面端处理，移动端用自适应高度
+      if (window.matchMedia("(max-width: 900px)").matches) {
+        const media = document.querySelector(".work-media-card");
+        const info  = document.querySelector(".work-info-card");
+        if (media) media.style.minHeight = "";
+        if (info)  info.style.minHeight  = "";
+        return;
+      }
+      const media = document.querySelector(".work-media-card");
+      const info  = document.querySelector(".work-info-card");
+      if (!media || !info) return;
+      const maxNow = Math.max(media.offsetHeight, info.offsetHeight);
+      heroMinHeight = Math.max(heroMinHeight, maxNow);
+      media.style.minHeight = heroMinHeight + "px";
+      info.style.minHeight  = heroMinHeight + "px";
+    }
+    function applySavedTheme() {
+      try {
+        const saved = localStorage.getItem("siteTheme");
+        if (saved) {
+          const body = document.body;
+          const classes = body.className.split(/\s+/).filter(c => c && !c.startsWith("theme-"));
+          classes.push(saved);
+          body.className = classes.join(" ");
+        }
+      } catch (e) {}
+    }
+
+    function applySavedLanguage() {
+      let lang = "en";
+      try {
+        const stored = localStorage.getItem("siteLang");
+        if (stored === "en" || stored === "zh") {
+          lang = stored;
+        }
+      } catch (e) {}
+      const body = document.body;
+      const classes = body.className.split(/\s+/).filter(c => c && !c.startsWith("lang-"));
+      classes.push(lang === "zh" ? "lang-zh" : "lang-en");
+      body.className = classes.join(" ");
+      const btn = document.getElementById("langToggleBtn");
+      if (btn) {
+        btn.textContent = lang === "zh" ? "中文" : "EN";
+      }
+      equalizeHeroHeights();
+    }
+
+    function toggleLanguage() {
+      const body = document.body;
+      const isZH = body.className.split(/\s+/).includes("lang-zh");
+      const newLang = isZH ? "en" : "zh";
+      const classes = body.className.split(/\s+/).filter(c => c && !c.startsWith("lang-"));
+      classes.push(newLang === "zh" ? "lang-zh" : "lang-en");
+      body.className = classes.join(" ");
+      try {
+        localStorage.setItem("siteLang", newLang);
+      } catch (e) {}
+      const btn = document.getElementById("langToggleBtn");
+      if (btn) {
+        btn.textContent = newLang === "zh" ? "中文" : "EN";
+      }
+      // 语言切换后重新对齐左右两栏高度，但保持不会比之前更矮
+      setTimeout(equalizeHeroHeights, 0);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      applySavedTheme();
+      applySavedLanguage();
+      // 初始加载完语言和主题后，对齐一次高度
+      setTimeout(equalizeHeroHeights, 50);
+    });
+
+    // 等图片完全加载后再矫正一次高度，避免图片加载后高度发生变化
+    window.addEventListener("load", () => {
+      equalizeHeroHeights();
+    });
+  </script>
+
+</body>
+</html>

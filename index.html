@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GUO JIAMING | Portfolio</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #222;
+      overflow: hidden; /* 不要滚动条，整屏就是一张图 */
+      transition: background 0.4s ease;
+    }
+
+    /* ===== Language visibility control ===== */
+    /* 默认情况下，两种语言都按各自标签的默认 display 呈现。
+       通过在 body 上标记 lang-en / lang-zh，只隐藏非当前语言。 */
+    body.lang-en .lang-zh {
+      display: none;
+    }
+    body.lang-zh .lang-en {
+      display: none;
+    }
+
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .lang-toggle {
+      border: none;
+      background: transparent;
+      padding: 0;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    .lang-toggle.active {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    .lang-toggle-sep {
+      opacity: 0.5;
+      font-size: 0.8rem;
+    }
+
+    /* ===== 背景主题（和 works-vertical 保持一致） ===== */
+    .theme-neutral {
+      background: linear-gradient(135deg, #ffffff, #c8c8c8);
+    }
+
+    .theme-warmgrey {
+      background: linear-gradient(135deg, #ffb199, #ff6f85);
+    }
+
+    .theme-bluegrey {
+      background: linear-gradient(135deg, #3a3a3a, #151515);
+    }
+
+    /* ===== Navbar：左 logo，右导航 ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      z-index: 20;
+      box-sizing: border-box;
+      transform: translateY(0);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .navbar.nav-hidden {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 10px; 
+      white-space: nowrap;
+    }
+
+    .logo-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .logo-role {
+      font-size: 0.78rem;
+      font-weight: 500;
+      opacity: 0.65;
+      letter-spacing: 0.5px;
+      color: #222;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-size: 0.95rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: #5563aa;
+    }
+
+    @media (max-width: 900px) {
+      .navbar {
+        padding: 0 20px;
+      }
+    }
+
+    /* ===== 全屏 Hero 背景区域 ===== */
+    .hero-full {
+      position: relative;
+      width: 100%;
+      height: 100vh; /* 正好一屏 */
+      overflow: hidden;
+    }
+
+    /* 背景图片全屏铺满（cover） */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* 完全塞满屏幕，多余部分裁掉 */
+      display: block;
+    }
+
+    /* 左侧 60% 的渐变遮罩（放个人信息） */
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 85%;       /* 左侧占 85% */
+      min-width: 260px; /* 防止超窄时挤死文字 */
+      height: 100%;
+      z-index: 1;
+      /* 从左到右：实色灰 → 半透明 → 全透明 */
+      box-sizing: border-box;
+      padding: 96px 40px 40px; /* 上面留出导航高度空间 */
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    /* Neutral theme overlay */
+    .theme-neutral .hero-overlay {
+      background: linear-gradient(
+        to right,
+        rgba(227, 227, 227, 0.96) 0%,
+        rgba(227, 227, 227, 0.92) 25%,
+        rgba(227, 227, 227, 0.7) 50%,
+        rgba(227, 227, 227, 0.35) 75%,
+        rgba(227, 227, 227, 0.0) 100%
+      );
+    }
+
+    /* Warm grey theme overlay */
+    .theme-warmgrey .hero-overlay {
+      background: linear-gradient(
+        to right,
+        rgba(255, 177, 153, 0.96) 0%,
+        rgba(255, 177, 153, 0.88) 25%,
+        rgba(255, 177, 153, 0.60) 50%,
+        rgba(255, 177, 153, 0.30) 75%,
+        rgba(255, 177, 153, 0.0) 100%
+      );
+    }
+
+    /* Blue grey theme overlay */
+    .theme-bluegrey .hero-overlay {
+      background: linear-gradient(
+        to right,
+        rgba(20, 20, 20, 0.96) 0%,
+        rgba(20, 20, 20, 0.85) 25%,
+        rgba(20, 20, 20, 0.55) 50%,
+        rgba(20, 20, 20, 0.25) 75%,
+        rgba(20, 20, 20, 0.0) 100%
+      );
+    }
+
+    @media (max-width: 900px) {
+      .hero-overlay {
+        width: 60%; /* 小屏时遮罩稍微宽一点 */
+        padding: 88px 20px 32px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      /* 导航栏稍微矮一点，内边距也减一点 */
+      .navbar {
+        height: 56px;
+        padding: 0 16px;
+      }
+
+      /* 手机端只保留名字，隐藏 Digital Media Artist 这一小段 */
+      .logo-role {
+        display: none;
+      }
+
+      /* 导航文字稍微小一点，避免再挤 */
+      .nav-links a {
+        font-size: 0.9rem;
+        gap: 20px;
+      }
+    }
+
+    .hero-content {
+      max-width: 420px;
+    }
+
+    .hero-name {
+      font-size: 2.2rem;
+      margin: 0 0 8px;
+    }
+
+    .hero-role {
+      font-size: 1rem;
+      opacity: 0.8;
+      margin: 0 0 18px;
+    }
+
+    .hero-text {
+      font-size: 0.98rem;
+      opacity: 0.9;
+      line-height: 1.7;
+      margin: 0 0 16px;
+      white-space: pre-line;
+    }
+
+    .hero-meta {
+      font-size: 0.88rem;
+      opacity: 0.8;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    /* 可选：在左侧再放一个按钮（例如跳作品或下载 CV） */
+    .hero-actions {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      border: none;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-outline span {
+      margin-left: 6px;
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 0, 0, 0.95);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    /* 右下角悬浮的 “View all works” 按钮（在图片上） */
+    .hero-viewall {
+      position: absolute;
+      right: 40px;
+      bottom: 40px;
+      z-index: 2;
+    }
+
+    @media (max-width: 900px) {
+      .hero-viewall {
+        right: 20px;
+        bottom: 24px;
+      }
+    }
+
+    .hero-viewall a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .hero-viewall a span {
+      margin-left: 6px;
+    }
+
+    .hero-viewall a:hover {
+      background: rgba(0, 0, 0, 0.95);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    /* ===== 右下角主题切换按钮 ===== */
+    .theme-buttons {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 30;
+    }
+
+    .theme-btn {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid #bfbfbf;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.15);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-neutral {
+      background: linear-gradient(135deg, #ffffff, #c8c8c8);
+    }
+
+    .btn-warmgrey {
+      background: linear-gradient(135deg, #ffb199, #ff6f85);
+    }
+
+    .btn-bluegrey {
+      background: linear-gradient(135deg, #3a3a3a, #151515);
+    }
+    /* Dark theme text color overrides */
+    body.theme-bluegrey {
+      color: #f5f5f5;
+    }
+
+    body.theme-bluegrey .hero-name,
+    body.theme-bluegrey .hero-role,
+    body.theme-bluegrey .hero-text,
+    body.theme-bluegrey .hero-meta {
+      color: #f5f5f5;
+    }
+  </style>
+</head>
+
+<body class="theme-neutral lang-en">
+
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="logo">
+      <span class="logo-name lang-en">GUO JIAMING</span>
+      <span class="logo-name lang-zh">郭佳铭</span>
+      <span class="logo-role lang-en">Digital Media Artist</span>
+      <span class="logo-role lang-zh">数字媒体艺术创作者</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="lang-en">Home</a>
+      <a href="index.html" class="lang-zh">首页</a>
+      <a href="works.html" class="lang-en">Works</a>
+      <a href="works.html" class="lang-zh">作品</a>
+      <div class="lang-switch">
+        <button class="lang-toggle" id="langToggleLabel" onclick="toggleLang()">EN</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 全屏 Hero 区域：背景图 + 左侧遮罩 + 信息 + 右下按钮 -->
+  <main class="hero-full">
+    <!-- 背景图：JS 会定时切换这张 img 的 src -->
+    <div class="hero-bg">
+      <img id="heroImage" src="[待补充 · image path 1]" alt="[待补充 · hero image alt]" />
+    </div>
+
+    <!-- 左侧 40% 渐变遮罩 + 个人信息 -->
+    <section class="hero-overlay">
+      <div class="hero-content">
+        <h1 class="hero-name lang-en">GUO JIAMING</h1>
+        <h1 class="hero-name lang-zh">郭佳铭</h1>
+        <p class="hero-role lang-en">Digital Media Artist</p>
+        <p class="hero-role lang-zh">数字媒体艺术创作者</p>
+        <p class="hero-text lang-en">
+Works across painting, video, and multi-image composition.
+Focused on organisms, natural forms, and the translation of personal thought into visual language.
+Interested in how images and moving images articulate perception, observation, and subtle shifts in experience.
+        </p>
+        <p class="hero-text lang-zh">
+从事绘画、视频与多图像组合等创作形式。
+关注生物与自然的形态，以及如何将个人思考转化为视觉语言。
+对图像与影像如何呈现感知、观察与细微经验变化的过程感兴趣。
+        </p>
+        <p class="hero-meta lang-en" style="font-size: 0.78rem;">
+Studying at Xiamen University & University for the Creative Arts.
+        </p>
+        <p class="hero-meta lang-zh" style="font-size: 0.78rem;">
+就读于厦门大学 & University for the Creative Arts.
+        </p>
+        <p class="hero-contact lang-en" style="font-size: 0.75rem; opacity: 0.75; line-height: 1.6; white-space: pre-line; margin-top: 10px; font-style: italic;">
+Contact: ont.sheep@gmail.com
+        </p>
+        <p class="hero-contact lang-zh" style="font-size: 0.75rem; opacity: 0.75; line-height: 1.6; white-space: pre-line; margin-top: 10px; font-style: italic;">
+联系：ont.sheep@gmail.com
+        </p>
+
+        <!-- 可选次要按钮（不需要也可以删掉整个 hero-actions 块） -->
+        <div class="hero-actions">
+          <a class="btn-outline lang-en" href="works.html">
+            View all works<span>→</span>
+          </a>
+          <a class="btn-outline lang-zh" href="works.html">
+            查看全部作品<span>→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 右下角主题切换按钮 -->
+  <div class="theme-buttons">
+    <div class="theme-btn btn-neutral"  onclick="setTheme('theme-neutral')"  title="Neutral grey"></div>
+    <div class="theme-btn btn-warmgrey" onclick="setTheme('theme-warmgrey')" title="Warm grey"></div>
+    <div class="theme-btn btn-bluegrey" onclick="setTheme('theme-bluegrey')" title="Blue grey"></div>
+  </div>
+
+  <script>
+    // 切换背景主题并保存到 localStorage
+    function setTheme(themeName) {
+      const body = document.body;
+      body.classList.remove("theme-neutral", "theme-warmgrey", "theme-bluegrey");
+      body.classList.add(themeName);
+      try {
+        localStorage.setItem("siteTheme", themeName);
+      } catch (e) {
+        // 如果浏览器禁止了 localStorage，就静默失败
+      }
+    }
+
+    // 页面加载时应用已保存的主题（如果有）
+    function applySavedTheme() {
+      try {
+        const savedTheme = localStorage.getItem("siteTheme");
+        if (savedTheme) {
+          const body = document.body;
+          body.classList.remove("theme-neutral", "theme-warmgrey", "theme-bluegrey");
+          body.classList.add(savedTheme);
+        }
+      } catch (e) {
+        // 无法访问 localStorage 时，保持默认主题
+      }
+    }
+
+    // ===== Language switch: EN / ZH =====
+    function setLang(lang, persist = true) {
+      const body = document.body;
+      body.classList.remove("lang-en", "lang-zh");
+      body.classList.add("lang-" + lang);
+
+      if (persist) {
+        try {
+          localStorage.setItem("siteLang", lang);
+        } catch (e) {}
+      }
+
+      // 更新导航栏按钮文字：英文模式显示 EN，中文模式显示 中文
+      const toggleBtn = document.getElementById("langToggleLabel");
+      if (toggleBtn) {
+        toggleBtn.textContent = (lang === "en") ? "EN" : "中文";
+      }
+    }
+
+    function toggleLang() {
+      const body = document.body;
+      const isEn = body.classList.contains("lang-en");
+      const nextLang = isEn ? "zh" : "en";
+      setLang(nextLang);
+    }
+
+    function applySavedLang() {
+      try {
+        const saved = localStorage.getItem("siteLang");
+        if (saved === "en" || saved === "zh") {
+          setLang(saved, false);
+        } else {
+          setLang("en", false);
+        }
+      } catch (e) {
+        setLang("en", false);
+      }
+    }
+
+    // ===== 背景图片轮播：请把路径改成你自己的作品图 =====
+    const heroImages = [
+      "images/1.1.png",
+      "images/1.2.jpg",
+      "images/1.3.jpeg",
+      "images/2.1.jpg",
+      "images/2.2.jpg",
+      "images/2.3.jpg",
+      "images/2.4.jpg",
+      "images/2.5.jpg",
+      "videos/2.1.png",
+      "videos/4.1.png",
+      "videos/5.1.png",
+      "videos/6.1.png"
+    ];
+
+    let heroIndex = 0;
+
+    function startHeroSlideshow() {
+      const imgEl = document.getElementById("heroImage");
+      if (!imgEl || heroImages.length === 0) return;
+
+      // 初始使用数组的第一张
+      imgEl.src = heroImages[0];
+
+      setInterval(() => {
+        heroIndex = (heroIndex + 1) % heroImages.length;
+        imgEl.src = heroImages[heroIndex];
+      }, 5000); // 每 5 秒切换一次
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // 先应用已保存的主题（如果有）
+      applySavedTheme();
+
+      // 再应用已保存的语言（如果有）
+      applySavedLang();
+
+      // 启动背景轮播
+      startHeroSlideshow();
+
+      const navbar = document.querySelector('.navbar');
+      let navHideTimeout = null;
+
+      // 初始状态隐藏导航栏
+      if (navbar) {
+        navbar.classList.add('nav-hidden');
+      }
+
+      function showNavbarTemporarily() {
+        if (!navbar) return;
+        navbar.classList.remove('nav-hidden');
+        clearTimeout(navHideTimeout);
+        // 停留一小段时间后自动收起
+        navHideTimeout = setTimeout(() => {
+          navbar.classList.add('nav-hidden');
+        }, 2000);
+      }
+
+      // 鼠标移动到顶部区域时显示导航栏
+      document.addEventListener('mousemove', (e) => {
+        if (e.clientY < 40) {
+          showNavbarTemporarily();
+        }
+      });
+
+      // 触屏设备：触摸一下就显示导航栏，并保持显示
+      document.addEventListener('touchstart', () => {
+        if (!navbar) return;
+        navbar.classList.remove('nav-hidden');
+      }, { passive: true });
+    });
+  </script>
+
+</body>
+</html>
