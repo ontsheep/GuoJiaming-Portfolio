@@ -96,9 +96,9 @@
 
     /* ===== 页面布局 ===== */
     .page-wrap {
-      max-width: 1100px;
+      max-width: 1240px;      /* 更宽一点，在大屏上不会太挤 */
       margin: 0 auto;
-      padding: 80px 40px 80px;
+      padding: 88px 56px 96px; /* 略微增大左右和底部留白 */
       box-sizing: border-box;
     }
 
@@ -152,6 +152,62 @@
       /* 手机端：整体内容离导航栏更近一点 */
       .page-wrap {
         padding: 64px 20px 60px; /* 只在 <=640px 时生效，覆盖 800px 那里的 90px 顶部 padding */
+      }
+    }
+
+    /* ===== CV layout: intro + two-column grid ===== */
+    .cv-section {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .cv-main-card {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+      padding: 18px 22px 22px;
+      box-sizing: border-box;
+      margin-bottom: 32px;
+    }
+
+    .cv-intro {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin: 12px 0 0;
+      opacity: 0.9;
+    }
+
+    .cv-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.3fr);
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .cv-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cv-section-group {
+      margin-bottom: 0;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.16);
+      padding: 14px 18px 16px;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 900px) {
+      .cv-grid {
+        grid-template-columns: 1fr;
       }
     }
     
@@ -615,6 +671,11 @@
     body.theme-bluegrey .back-link a {
       color: #f5f5f5;
     }
+    body.theme-bluegrey .cv-main-card,
+    body.theme-bluegrey .cv-section-group {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.35);
+    }
     /* ===== 语言可见性控制：与 index / works 一致 ===== */
     body.lang-en .lang-zh {
       display: none;
@@ -670,82 +731,106 @@
   </nav>
 
   <main class="page-wrap">
-    <!-- 返回 Works 链接 -->
-    <div class="back-link">
-      <a href="works.html">
-        <span class="lang-en">← Back to works</span>
-        <span class="lang-zh">← 返回作品列表</span>
-      </a>
-    </div>
+    <section class="cv-section">
+      <div class="cv-main-card">
+        <h1 class="work-title">
+          <span class="lang-en">Curriculum Vitae</span>
+          <span class="lang-zh">个人简历</span>
+        </h1>
 
-    <!-- 顶部：主媒体 + 作品信息 -->
-    <section class="work-hero">
-      <!-- 左侧：主媒体（可以是 video 或单张代表图） -->
-      <article class="work-media-card">
-        <div class="work-media-frame">
-          <div class="work-media-inner">
-            <!-- 如果是视频作品，请改回 video；如果是图像系列，则用堆叠形式 -->
-            <!-- 堆叠大图：请用真实路径替换下面三张图片 -->
-            <div class="media-stack-layer" onclick="openLightbox(0)">
-              <img src="images/1.1.png" alt="[待补充 · alt 1]" />
-            </div>
-            <div class="media-stack-layer" onclick="openLightbox(1)">
-              <img src="images/1.2.jpg" alt="[待补充 · alt 2]" />
-            </div>
-            <div class="media-stack-layer" onclick="openLightbox(2)">
-              <img src="images/1.3.jpeg" alt="[待补充 · alt 3]" />
-            </div>
+        <p class="cv-intro lang-en">
+          Digital media artist studying in Xiamen, developing image-based works across drawing, video and multi-image sequences, with a focus on biology, nature and how personal thoughts can be translated into visual form.
+        </p>
+        <p class="cv-intro lang-zh">
+          在厦门学习的数字媒体艺术创作者，创作涵盖绘画、视频与多图像序列，关注生物与自然，并持续思考如何将个人思考转化为可视化的表达。
+        </p>
+      </div>
+
+      <div class="cv-grid">
+        <div class="cv-col">
+          <div class="cv-section-group">
+            <h2 class="work-section-title">
+              <span class="lang-en">Education</span>
+              <span class="lang-zh">教育背景</span>
+            </h2>
+            <p class="work-text lang-en">2021 – present  ·  B.A. Digital Media Art, Xiamen University & University for the Creative Arts</p>
+            <p class="work-text lang-zh">2021 – 至今 · 数字媒体艺术本科，厦门大学 & University for the Creative Arts
+            </p>
+          </div>
+
+          <div class="cv-section-group">
+            <h2 class="work-section-title">
+              <span class="lang-en">Selected Projects</span>
+              <span class="lang-zh">部分项目</span>
+            </h2>
+            <p class="work-text lang-en">
+              Coelacanth（2025 · Hand-drawn Animation）<br>
+              •Created a hand-drawn black-and-white animation exploring themes of life, evolution, and genetics.<br>
+              •Developed the narrative starting from the coelacanth species and its long evolutionary history.<br>
+              •Produced frame-by-frame animation using FlipaClip and completed editing with digital tools.<br>
+              <br>
+              World TELE（2021 · Artist Book）<br>
+              •Created a handmade book documenting the TELE world and its skeletal underworld.<br>
+              •Illustrated the narrative from the viewpoint of the explorer Grandbe to guide audience immersion.<br>
+              •Crafted the book using cowhide leather, paper, cardboard, white thread, and adhesives.<br>
+              </p>
+            <p class="work-text lang-zh">腔棘鱼（2025 · 手绘动画）<br>
+              •创作黑白手绘动画，探索生命、进化与遗传主题。<br>
+              •以腔棘鱼物种及其漫长进化史为起点展开叙事。<br>
+              •运用FlipaClip制作逐帧动画，并通过数字工具完成后期剪辑。<br>
+              <br>
+              World TELE（2021 · 手工书）<br>
+              •手工制作记录TELE世界及其骨骼地狱的。<br>
+              •以探险家Grandbe的视角绘制叙事插图，引导观众沉浸体验。<br>
+              •采用牛皮革、纸张、硬纸板、白线及粘合剂手工制作成册。</p>
+          </div>
+
+          
+        </div>
+
+        <div class="cv-col">
+          <div class="cv-section-group">
+            <h2 class="work-section-title">
+              <span class="lang-en">Skills &amp; Tools</span>
+              <span class="lang-zh">个人技能</span>
+            </h2>
+            <p class="work-text lang-en">
+              Software: Photoshop, Unity, Blender<br>
+              Programming: C#, JavaScript<br>
+              Design: Basic UI layout, simple visual composition, drawing and illustration<br>
+              Research: Collecting references, organizing project ideas, summarizing design directions<br>
+              Languages: CET-4 (English)
+              </p>
+            <p class="work-text lang-zh">
+              软件：Photoshop、Unity、Blender<br>
+              编程：C#、JavaScript<br>
+              设计：基础界面布局、简单视觉构图、绘画与插画<br>
+              研究：收集参考资料、整理项目构思、总结设计方向<br>
+              语言：英语四级（CET-4）</p>
+          </div>
+
+          <div class="cv-section-group">
+            <h2 class="work-section-title">
+              <span class="lang-en">Personal Info</span>
+              <span class="lang-zh">个人信息</span>
+            </h2>
+            <p class="work-text lang-en">Age: 24<br>
+              Birthplace: Wenzhou, Zhejiang </p>
+            <p class="work-text lang-zh">年龄：24<br>
+              出生地：浙江温州</p>
+          </div>
+
+          <div class="cv-section-group">
+            <h2 class="work-section-title">
+              <span class="lang-en">Contact</span>
+              <span class="lang-zh">联系方式</span>
+            </h2>
+            <p class="work-text lang-en">ont.sheep@gmail.com</p>
+            <p class="work-text lang-zh">ont.sheep@gmail.com</p>
           </div>
         </div>
-      </article>
-
-      <!-- 右侧：文本信息 -->
-      <aside class="work-info-card">
-        <h1 class="work-title">
-          <span class="lang-en">A series of collages</span>
-          <span class="lang-zh">一组拼贴作品</span>
-        </h1>
-        <div class="work-meta">
-          <span class="lang-en">2021 · Handmade Collage</span>
-          <span class="lang-zh">2021 · 手工拼贴</span>
-        </div>
-
-        <h2 class="work-section-title">
-          <span class="lang-en">Overview</span>
-          <span class="lang-zh">概述</span>
-        </h2>
-        <p class="work-text lang-en">
-          A series of collage works exploring dreams, childhood and aspirations.
-        </p>
-        <p class="work-text lang-zh">
-          一组围绕梦境、童年与愿望展开的拼贴作品。
-
-        <h2 class="work-section-title">
-          <span class="lang-en">Context</span>
-          <span class="lang-zh">背景</span>
-        </h2>
-        <p class="work-text lang-en">
-          The first collage depicts a dreamlike creature—a flying cattle-cart that does not exist in reality—representing my childhood fantasies and the surreal logic of dreams.
-          The second and third pieces draw from my early memories: objects and scenes I recalled from growing up were cut, rearranged, and rebuilt into new compositions. Through this process, I revisit how memory is assembled, distorted, and rewritten.
-        </p>
-        <p class="work-text lang-zh">
-          第一幅作品呈现了一个现实中不存在的梦境形象——一辆能够在蓝天中飞行的牛车，象征我孩童时期的幻想与梦境的超现实逻辑。
-第二与第三幅作品来自童年的记忆：我将记忆中的物件与场景重新拆解、拼凑，形成新的图像组合，借此重新理解记忆如何被重构、扭曲与书写。
-        </p>
-
-        <h2 class="work-section-title">
-          <span class="lang-en">Process</span>
-          <span class="lang-zh">过程</span>
-        </h2>
-        <p class="work-text lang-en">
-          The collages were created by cutting and tearing magazine pages, assembling the fragments manually, and fixing them with glue. 
-        </p>
-        <p class="work-text lang-zh">
-          整个系列采用手工方式完成：通过剪刀裁剪与手撕杂志图片，再以胶水粘贴组合。
-        </p>
-      </aside>
+      </div>
     </section>
-
   </main>
 
   <!-- 全屏图片浏览 lightbox -->

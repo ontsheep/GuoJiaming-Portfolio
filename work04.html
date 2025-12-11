@@ -35,14 +35,12 @@
     body.lang-zh .lang-en { display:none; }
 
     .lang-toggle {
-      border:none;
-      background:transparent;
-      font-size:0.9rem;
-      font-weight:500;
-      cursor:pointer;
-      padding:4px 10px;
-      border-radius:999px;
-      letter-spacing:0.02em;
+      border: none;
+      background: transparent;
+      padding: 0;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0.6;
     }
     .lang-toggle:hover { background:rgba(0,0,0,0.06); }
 
@@ -556,26 +554,34 @@
 
 <body class="theme-neutral lang-en">
 
-  <!-- 导航栏 -->
-  <nav class="navbar">
-    <div class="logo">
+<!-- 导航栏 -->
+<nav class="navbar">
+  <div class="logo">
+    <a href="index.html" style="text-decoration:none; color:inherit;">
       <span class="logo-name lang-en">GUO JIAMING</span>
       <span class="logo-name lang-zh">郭佳铭</span>
-
-      <span class="logo-role lang-en">Digital Media Artist</span>
-      <span class="logo-role lang-zh">数字媒体艺术创作者</span>
-    </div>
-
-    <div class="nav-links">
-      <a href="index.html" class="lang-en">Home</a>
-      <a href="index.html" class="lang-zh">首页</a>
-
-      <a href="works.html" class="lang-en">Works</a>
-      <a href="works.html" class="lang-zh">作品</a>
-
-      <button class="lang-toggle" id="langToggleLabel" type="button" onclick="toggleLang()">EN</button>
-    </div>
-  </nav>
+    </a>
+    <span class="logo-role lang-en">Digital Media Artist</span>
+    <span class="logo-role lang-zh">数字媒体艺术创作者</span>
+  </div>
+  <div class="nav-links">
+    <a href="index.html">
+      <span class="lang-en">Home</span>
+      <span class="lang-zh">首页</span>
+    </a>
+    <a href="works.html">
+      <span class="lang-en">Works</span>
+      <span class="lang-zh">作品</span>
+    </a>
+    <a href="cv.html">
+      <span class="lang-en">CV</span>
+      <span class="lang-zh">简历</span>
+    </a>
+    <button type="button" class="lang-toggle" id="langToggleBtn" onclick="toggleLanguage()">
+      EN
+    </button>
+  </div>
+</nav>
 
   <main class="page-wrap">
     <!-- 返回 Works 链接 -->
