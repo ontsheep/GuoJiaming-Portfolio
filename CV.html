@@ -180,6 +180,36 @@
       opacity: 0.9;
     }
 
+    .cv-download {
+      margin-top: 14px;
+    }
+
+    .cv-download-btn {
+      display: inline-block;
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: #222;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .cv-download-btn:hover {
+      background: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    }
+
+    body.theme-bluegrey .cv-download-btn {
+      color: #111;
+      background: rgba(255, 255, 255, 0.92);
+      border-color: rgba(0, 0, 0, 0.18);
+    }
+
     .cv-grid {
       display: grid;
       grid-template-columns: minmax(0, 3fr) minmax(0, 2.3fr);
@@ -744,6 +774,12 @@
         <p class="cv-intro lang-zh">
           在厦门学习的数字媒体艺术创作者，创作涵盖绘画、视频与多图像序列，关注生物与自然，并持续思考如何将个人思考转化为可视化的表达。
         </p>
+        <div class="cv-download">
+          <a href="CV.docx" class="cv-download-btn" download>
+            <span class="lang-en">Download CV (DOCX)</span>
+            <span class="lang-zh">下载简历（DOCX）</span>
+          </a>
+        </div>
       </div>
 
       <div class="cv-grid">
