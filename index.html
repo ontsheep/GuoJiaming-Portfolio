@@ -17,8 +17,17 @@
     body {
       font-family: 'Inter', sans-serif;
       color: #222;
-      overflow: hidden; /* 不要滚动条，整屏就是一张图 */
+      overflow-x: hidden; /* 禁止横向滚动，防止左右抖动 */
+      overflow-y: hidden; /* 桌面端默认不滚动 */
       transition: background 0.4s ease;
+    }
+
+    /* 手机端允许上下滚动 */
+    @media (max-width: 640px) {
+      body {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch; /* iOS 顺滑滚动 */
+      }
     }
 
     /* ===== Language visibility control ===== */
